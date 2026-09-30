@@ -1,7 +1,7 @@
 {
   "name": "maxVFX 로또 번호 랩",
   "short_name": "maxVFX Lotto",
-  "description": "내가 구매한 로또 6/45 번호를 스캔하고 개인 구매 패턴을 분석하는 로컬 도구",
+  "description": "내가 구매한 로또 6/45 번호를 스캔하고 구매 기록·사진·당첨 결과를 관리하고 개인 구매 패턴을 분석하는 로컬 도구",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
