@@ -142,6 +142,8 @@
 
     .history-tools{display:grid;grid-template-columns:minmax(180px,1.5fr) minmax(120px,.7fr) auto;gap:8px;margin-bottom:12px}.history-tools input,.history-tools select{width:100%}.history-tool-meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:10px}.storage-panel{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:9px 11px;margin-bottom:12px;border:1px solid var(--line);border-radius:12px;background:#0f131a}.storage-panel .storage-info{font-size:11px;color:var(--muted);flex:1;min-width:180px}.group-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.win-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:12px 0}.win-summary .stat{padding:9px;text-align:center}.win-summary .stat b{font-size:18px}.update-btn[hidden]{display:none!important}
     @media (max-width:640px){.history-tools{grid-template-columns:1fr 1fr}.history-tools .search-wide{grid-column:1/-1}.win-summary{grid-template-columns:repeat(3,1fr)}.group-actions{justify-content:flex-end}}
+    .history-sort-row{display:flex;gap:7px;flex-wrap:wrap;align-items:end}.history-sort-row .field{min-width:150px}.undo-btn[hidden]{display:none!important}
+    @media (max-width:640px){.history-sort-row{display:grid;grid-template-columns:1fr 1fr}.history-sort-row .field{min-width:0}}
     .version{color:#7ee787;border-color:#2d6039;background:#102418}
 
   </style>
@@ -221,7 +223,7 @@
         <div class="card-h"><h2>구매 기록</h2><div class="row"><button class="btn small" id="importBtn">JSON 가져오기</button><button class="btn small" id="exportBtn">JSON 백업</button><button class="btn small" id="csvExportBtn">CSV</button><button class="btn small danger" id="resetBtn">전체 초기화</button></div></div>
         <div class="card-b"><div class="help" style="margin-bottom:10px">회차별로 묶어서 표시합니다. 같은 회차에 완전히 같은 6개 조합이 있으면 중복 경고가 표시됩니다.</div>
           <div class="history-tools"><div class="field search-wide"><label>기록 검색</label><input id="historySearch" type="text" placeholder="회차, 메모, 번호 검색"></div><div class="field"><label>입력 방식</label><select id="historySource"><option value="all">전체</option><option value="qr">QR</option><option value="ocr">OCR</option><option value="manual">직접 입력</option></select></div><label class="toggle" style="align-self:end;padding-bottom:10px"><input id="historyImageOnly" type="checkbox"> 원본 사진 있음</label></div>
-          <div class="history-tool-meta"><span class="badge" id="historyFilterInfo">전체 기록</span></div>
+          <div class="history-sort-row"><div class="field"><label>정렬</label><select id="historySort"><option value="draw-desc">회차 높은 순</option><option value="date-desc">최근 등록 순</option><option value="date-asc">오래된 등록 순</option></select></div><div class="history-tool-meta"><span class="badge" id="historyFilterInfo">전체 기록</span><button class="btn small undo-btn" id="undoDrawBtn" hidden>↶ 회차 변경 취소</button></div></div>
           <div class="storage-panel"><div class="storage-info" id="imageStorageInfo">원본 사진 저장 용량 계산 중…</div><button class="btn small" id="refreshStorageBtn">용량 새로고침</button><button class="btn small danger" id="clearImagesBtn">원본 사진 전체 삭제</button></div>
           <div class="history" id="history"></div></div>
       </section>
@@ -307,7 +309,7 @@
     </aside>
   </div>
 
-  <p class="footer">v0.6.1 · 모바일 탭 UI, 최근 기록 분석 필터, 생성 조합 설명, 당첨번호 비교, 컬러 번호볼, PWA, OCR 3-Pass 분석을 지원합니다. OCR 언어/엔진 데이터는 최초 사용 시 인터넷 연결이 필요할 수 있습니다.</p>
+  <p class="footer">v0.8.0 · 기록 정렬, 회차 변경 다이얼로그/Undo, 저장 사진 갤러리, 당첨 비교 리포트/CSV, OCR 촬영 품질 진단, PWA 업데이트 감지를 지원합니다. OCR 언어/엔진 데이터는 최초 사용 시 인터넷 연결이 필요할 수 있습니다.</p>
 </div>
 
 <dialog id="cameraDialog">
@@ -338,6 +340,11 @@
   <div class="dialog-b"><img id="historyImage" class="history-image" alt="저장된 로또 원본"><div class="row" style="margin-top:12px"><button class="btn primary" id="rescanSavedBtn">이 사진 다시 스캔</button><button class="btn danger" id="deleteSavedImageBtn">사진만 삭제</button></div><div class="help" style="margin-top:8px">원본 사진은 이 브라우저의 IndexedDB에만 저장됩니다. JSON 백업에는 포함되지 않습니다.</div></div>
 </dialog>
 
+<dialog id="drawEditDialog">
+  <div class="dialog-h"><strong>회차 일괄 변경</strong><button class="btn small ghost" id="drawEditCloseBtn">닫기</button></div>
+  <div class="dialog-b"><div class="help" id="drawEditInfo">선택한 그룹의 회차를 한 번에 변경합니다.</div><div class="field" style="margin-top:12px"><label>새 회차</label><input id="drawEditInput" type="number" min="1" placeholder="비우면 회차 미입력"></div><div class="row" style="margin-top:14px"><button class="btn primary" id="drawEditSaveBtn">변경 적용</button><button class="btn ghost" id="drawEditCancelBtn">취소</button></div></div>
+</dialog>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
@@ -346,12 +353,12 @@
 (() => {
   'use strict';
 
-  const VERSION='0.7.0';
-  const STORAGE_KEY='lotto-number-lab-v070';
-  const LEGACY_KEYS=['lotto-number-lab-v060','lotto-number-lab-v050','lotto-number-lab-v040','lotto-number-lab-v030','lotto-number-lab-v020','lotto-number-lab-v010'];
+  const VERSION='0.8.0';
+  const STORAGE_KEY='lotto-number-lab-v080';
+  const LEGACY_KEYS=['lotto-number-lab-v070','lotto-number-lab-v060','lotto-number-lab-v050','lotto-number-lab-v040','lotto-number-lab-v030','lotto-number-lab-v020','lotto-number-lab-v010'];
   const state={
     batches:[], drawResults:[], analysisScope:'all', staged:[], generated:[], scanQueue:[], scanMap:new Map(),
-    cameraStream:null,cameraRAF:null,editorScanId:null,editorPoints:null,ocrWorker:null,ocrWorkerReady:false,ocrProgressCb:null,gameEditTicketId:null,gameEditIndex:null,deferredInstallPrompt:null,imageBatchId:null,historySearch:'',historySource:'all',historyImageOnly:false,swRegistration:null,waitingWorker:null
+    cameraStream:null,cameraRAF:null,editorScanId:null,editorPoints:null,ocrWorker:null,ocrWorkerReady:false,ocrProgressCb:null,gameEditTicketId:null,gameEditIndex:null,deferredInstallPrompt:null,imageBatchId:null,historySearch:'',historySource:'all',historyImageOnly:false,historySort:'draw-desc',bulkDrawKey:null,undoDraw:null,swRegistration:null,waitingWorker:null
   };
   const $=id=>document.getElementById(id);
   const els={
@@ -365,7 +372,7 @@
     editorDialog:$('editorDialog'),editorCanvas:$('editorCanvas'),editorHint:$('editorHint'),scanMode:$('scanMode'),strictRows:$('strictRows'),gameEditDialog:$('gameEditDialog'),gameEditGrid:$('gameEditGrid'),gameEditPreview:$('gameEditPreview'),
     pairList:$('pairList'),sumAverage:$('sumAverage'),sumRange:$('sumRange'),oddDistribution:$('oddDistribution'),zoneDistribution:$('zoneDistribution'),endingDistribution:$('endingDistribution'),patternGamesLabel:$('patternGamesLabel'),
     compareDialog:$('compareDialog'),compareSummary:$('compareSummary'),compareGrid:$('compareGrid'),installBtn:$('installBtn'),connectionBadge:$('connectionBadge'),connectionDot:$('connectionDot'),connectionText:$('connectionText'),
-    analysisScope:$('analysisScope'),analysisScopeInfo:$('analysisScopeInfo'),mobileTabs:$('mobileTabs'),winDraw:$('winDraw'),winBonus:$('winBonus'),winningList:$('winningList'),saveOriginals:$('saveOriginals'),fetchOfficialBtn:$('fetchOfficialBtn'),openOfficialBtn:$('openOfficialBtn'),officialStatus:$('officialStatus'),imageDialog:$('imageDialog'),historyImage:$('historyImage'),historySearch:$('historySearch'),historySource:$('historySource'),historyImageOnly:$('historyImageOnly'),historyFilterInfo:$('historyFilterInfo'),imageStorageInfo:$('imageStorageInfo'),refreshStorageBtn:$('refreshStorageBtn'),clearImagesBtn:$('clearImagesBtn'),winningSummary:$('winningSummary'),checkUpdateBtn:$('checkUpdateBtn'),applyUpdateBtn:$('applyUpdateBtn')
+    analysisScope:$('analysisScope'),analysisScopeInfo:$('analysisScopeInfo'),mobileTabs:$('mobileTabs'),winDraw:$('winDraw'),winBonus:$('winBonus'),winningList:$('winningList'),saveOriginals:$('saveOriginals'),fetchOfficialBtn:$('fetchOfficialBtn'),openOfficialBtn:$('openOfficialBtn'),officialStatus:$('officialStatus'),imageDialog:$('imageDialog'),historyImage:$('historyImage'),historySearch:$('historySearch'),historySource:$('historySource'),historyImageOnly:$('historyImageOnly'),historyFilterInfo:$('historyFilterInfo'),imageStorageInfo:$('imageStorageInfo'),refreshStorageBtn:$('refreshStorageBtn'),clearImagesBtn:$('clearImagesBtn'),winningSummary:$('winningSummary'),checkUpdateBtn:$('checkUpdateBtn'),applyUpdateBtn:$('applyUpdateBtn'),historySort:$('historySort'),undoDrawBtn:$('undoDrawBtn'),drawEditDialog:$('drawEditDialog'),drawEditInput:$('drawEditInput'),drawEditInfo:$('drawEditInfo')
   };
 
   function uid(){return crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)}
@@ -403,14 +410,14 @@
     return {id:String(b.id||uid()),createdAt:b.createdAt||new Date().toISOString(),draw:Number.isFinite(Number(b.draw))&&Number(b.draw)>0?Number(b.draw):null,memo:String(b.memo||'').slice(0,100),source:String(b.source||'import'),qrKey:b.qrKey?String(b.qrKey):null,games,imageStored:Boolean(b.imageStored)};
   }
   function sanitizeDrawResult(r){const draw=Number(r?.draw),numbers=Array.isArray(r?.numbers)?r.numbers.map(Number):[],bonus=Number(r?.bonus);if(!Number.isFinite(draw)||draw<1||!validGame(numbers)||!Number.isInteger(bonus)||bonus<1||bonus>45||numbers.includes(bonus))return null;return {draw,numbers:sortGame(numbers),bonus,updatedAt:r.updatedAt||new Date().toISOString()}}
-  function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify({version:VERSION,batches:state.batches,drawResults:state.drawResults,analysisScope:state.analysisScope,historySource:state.historySource,historyImageOnly:state.historyImageOnly}))}
+  function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify({version:VERSION,batches:state.batches,drawResults:state.drawResults,analysisScope:state.analysisScope,historySource:state.historySource,historyImageOnly:state.historyImageOnly,historySort:state.historySort}))}
   function load(){
     let raw=null,migrated=false;
     try{raw=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null')}catch{}
     if(!raw){for(const k of LEGACY_KEYS){try{const legacy=JSON.parse(localStorage.getItem(k)||'null');if(legacy){raw=legacy;migrated=true;break}}catch{}}}
     const batches=Array.isArray(raw?.batches)?raw.batches.map(sanitizeBatch).filter(Boolean):[];
-    state.batches=batches;state.drawResults=Array.isArray(raw?.drawResults)?raw.drawResults.map(sanitizeDrawResult).filter(Boolean):[];state.analysisScope=String(raw?.analysisScope||'all');state.historySource=String(raw?.historySource||'all');state.historyImageOnly=Boolean(raw?.historyImageOnly);
-    if(els.analysisScope)els.analysisScope.value=[...els.analysisScope.options].some(o=>o.value===state.analysisScope)?state.analysisScope:'all';if(els.historySource)els.historySource.value=['all','qr','ocr','manual'].includes(state.historySource)?state.historySource:'all';if(els.historyImageOnly)els.historyImageOnly.checked=state.historyImageOnly;
+    state.batches=batches;state.drawResults=Array.isArray(raw?.drawResults)?raw.drawResults.map(sanitizeDrawResult).filter(Boolean):[];state.analysisScope=String(raw?.analysisScope||'all');state.historySource=String(raw?.historySource||'all');state.historyImageOnly=Boolean(raw?.historyImageOnly);state.historySort=String(raw?.historySort||'draw-desc');
+    if(els.analysisScope)els.analysisScope.value=[...els.analysisScope.options].some(o=>o.value===state.analysisScope)?state.analysisScope:'all';if(els.historySource)els.historySource.value=['all','qr','ocr','manual'].includes(state.historySource)?state.historySource:'all';if(els.historyImageOnly)els.historyImageOnly.checked=state.historyImageOnly;if(els.historySort)els.historySort.value=['draw-desc','date-desc','date-asc'].includes(state.historySort)?state.historySort:'draw-desc';
     if(migrated&&batches.length){save();setTimeout(()=>toast(`기존 버전 기록 ${batches.length}건을 v0.6.1으로 자동 이전했습니다.`),450)}
   }
 
@@ -757,12 +764,15 @@
     const q=String(state.historySearch||'').trim().toLowerCase(),src=state.historySource||'all';
     return state.batches.filter(b=>{if(src!=='all'){const family=(b.source||'').includes('qr')?'qr':b.source;if(family!==src)return false}if(state.historyImageOnly&&!b.imageStored)return false;if(!q)return true;const hay=[b.draw||'',b.memo||'',b.source||'',...(b.games||[]).flat()].join(' ').toLowerCase();return hay.includes(q)});
   }
-  function bulkChangeDraw(oldKey){const batches=state.batches.filter(b=>(oldKey==='unknown'?!b.draw:String(b.draw)===String(oldKey)));if(!batches.length)return;const current=oldKey==='unknown'?'':oldKey;const raw=prompt(`이 그룹 ${batches.length}장의 회차를 변경합니다. 새 회차를 입력하세요.\n비워두면 회차 미입력으로 변경됩니다.`,current);if(raw===null)return;const value=String(raw).trim()===''?null:Number(raw);if(value!==null&&(!Number.isInteger(value)||value<1))return toast('올바른 회차 번호를 입력해 주세요.');batches.forEach(b=>b.draw=value);save();renderAll();toast(`${batches.length}장의 회차를 ${value?value+'회':'미입력'}으로 변경했습니다.`)}
+  function bulkChangeDraw(oldKey){const batches=state.batches.filter(b=>(oldKey==='unknown'?!b.draw:String(b.draw)===String(oldKey)));if(!batches.length)return;state.bulkDrawKey=oldKey;els.drawEditInput.value=oldKey==='unknown'?'':oldKey;els.drawEditInfo.textContent=`${batches.length}장의 회차를 한 번에 변경합니다. 값을 비우면 회차 미입력으로 변경됩니다.`;els.drawEditDialog.showModal()}
+  function applyBulkDraw(){const oldKey=state.bulkDrawKey,batches=state.batches.filter(b=>(oldKey==='unknown'?!b.draw:String(b.draw)===String(oldKey)));if(!batches.length)return els.drawEditDialog.close();const raw=String(els.drawEditInput.value||'').trim(),value=raw===''?null:Number(raw);if(value!==null&&(!Number.isInteger(value)||value<1))return toast('올바른 회차 번호를 입력해 주세요.');state.undoDraw=batches.map(b=>({id:b.id,draw:b.draw||null}));batches.forEach(b=>b.draw=value);save();els.drawEditDialog.close();if(els.undoDrawBtn)els.undoDrawBtn.hidden=false;renderAll();toast(`${batches.length}장의 회차를 ${value?value+'회':'미입력'}으로 변경했습니다.`)}
+  function undoBulkDraw(){if(!state.undoDraw?.length)return;for(const x of state.undoDraw){const b=state.batches.find(y=>y.id===x.id);if(b)b.draw=x.draw}state.undoDraw=null;if(els.undoDrawBtn)els.undoDrawBtn.hidden=true;save();renderAll();toast('회차 변경을 취소했습니다.')}
+  function groupSortValue(batches){const dates=batches.map(b=>new Date(b.createdAt).getTime()||0);return state.historySort==='date-asc'?Math.min(...dates):Math.max(...dates)}
   function renderHistory(){
     const filtered=historyFilteredBatches();if(els.historyFilterInfo)els.historyFilterInfo.textContent=`${filtered.length}/${state.batches.length}장 표시`;
     if(!filtered.length){els.history.innerHTML='<div class="empty">조건에 맞는 구매 기록이 없습니다.</div>';return}
     const groups=new Map();for(const b of filtered){const k=b.draw?String(b.draw):'unknown';if(!groups.has(k))groups.set(k,[]);groups.get(k).push(b)}
-    const entries=[...groups.entries()].sort((a,b)=>{if(a[0]==='unknown')return 1;if(b[0]==='unknown')return -1;return Number(b[0])-Number(a[0])});
+    const entries=[...groups.entries()].sort((a,b)=>{if(state.historySort==='draw-desc'){if(a[0]==='unknown')return 1;if(b[0]==='unknown')return -1;return Number(b[0])-Number(a[0])}const av=groupSortValue(a[1]),bv=groupSortValue(b[1]);return state.historySort==='date-asc'?av-bv:bv-av});
     els.history.innerHTML=entries.map(([draw,batches])=>{const dup=duplicateMapForBatches(batches),dupKeys=[...dup].filter(([,c])=>c>1),gameCount=batches.reduce((s,b)=>s+b.games.length,0);return `<details class="history-group" open><summary><span>${draw==='unknown'?'회차 미입력':`${draw}회`} · ${batches.length}장 · ${gameCount}게임</span><span class="group-actions"><span class="badge">${dupKeys.length?`중복 ${dupKeys.length}종`:'중복 없음'}</span><button class="btn small" type="button" data-bulk-draw="${draw}">회차 변경</button></span></summary><div class="history-group-body">${dupKeys.length?`<div class="dup-warn">⚠ 같은 회차에서 동일한 번호 조합이 반복 등록되어 있습니다: ${dupKeys.slice(0,5).map(([k,c])=>`${k.replaceAll('-', ' · ')} ×${c}`).join(' / ')}</div>`:''}${batches.map(b=>{const d=new Date(b.createdAt),src={qr:'QR','qr-camera':'카메라 QR',ocr:'OCR',manual:'직접 입력',import:'가져오기'}[b.source]||b.source;return `<div class="history-item ${b.games.some(g=>(dup.get(gameKey(g))||0)>1)?'dup-hit':''}"><div class="history-top"><div><div class="history-title">${b.memo?esc(b.memo):'구매 기록'}</div><div class="history-meta">${src} · ${d.toLocaleString('ko-KR')}</div></div><div class="row">${b.imageStored?`<button class="btn small" data-view-image="${b.id}">원본 보기</button>`:''}<button class="btn small danger" data-delete-batch="${b.id}">삭제</button></div></div><div class="history-games">${b.games.map((g,i)=>`<div class="history-game"><span class="row-label">${String.fromCharCode(65+i)}</span><div class="balls">${g.map(n=>ballHTML(n)).join('')}</div>${(dup.get(gameKey(g))||0)>1?'<span class="dup-tag">중복</span>':''}</div>`).join('')}</div></div>`}).join('')}</div></details>`}).join('')
   }
 
@@ -816,7 +826,8 @@
   els.candidateWrap.onclick=e=>{const rt=e.target.closest('[data-remove-ticket]');if(rt){state.staged=state.staged.filter(t=>t.id!==rt.dataset.removeTicket);renderCandidates();return}const eg=e.target.closest('[data-edit-game]');if(eg){const [id,idx]=eg.dataset.editGame.split(':');openGameEditor(id,Number(idx));return}const rg=e.target.closest('[data-remove-game]');if(rg){const [id,idx]=rg.dataset.removeGame.split(':');const t=state.staged.find(x=>x.id===id);if(t){t.games.splice(Number(idx),1);if(t.scanMeta?.labels)t.scanMeta.labels.splice(Number(idx),1);if(!t.games.length)state.staged=state.staged.filter(x=>x.id!==id);renderCandidates()}return}const ed=e.target.closest('[data-edit-scan]');if(ed){openEditor(ed.dataset.editScan);return}const cp=e.target.closest('[data-compare-ticket]');if(cp){const t=state.staged.find(x=>x.id===cp.dataset.compareTicket);if(t)openCompare(t.scanMeta,t.label||'티켓 OCR');return}const tx=e.target.closest('[data-send-ocr]');if(tx){const t=state.staged.find(x=>x.id===tx.dataset.sendOcr);if(t){els.manualInput.value=t.rawText||'';els.manualInput.scrollIntoView({behavior:'smooth',block:'center'});toast('OCR 원문을 직접 입력 칸에 넣었습니다.')}}};
   els.candidateWrap.oninput=e=>{const d=e.target.closest('[data-ticket-draw]');if(d){const t=state.staged.find(x=>x.id===d.dataset.ticketDraw);if(t)t.draw=d.value?Number(d.value):null}const m=e.target.closest('[data-ticket-memo]');if(m){const t=state.staged.find(x=>x.id===m.dataset.ticketMemo);if(t)t.memo=m.value}};
   els.scanQueue.onclick=e=>{const a=e.target.closest('[data-adjust-scan]');if(a)return openEditor(a.dataset.adjustScan);const c=e.target.closest('[data-compare-scan]');if(c){const q=state.scanMap.get(c.dataset.compareScan);if(q)openCompare(q.scanMeta,q.name);return}const t=e.target.closest('[data-queue-text]');if(t){const q=state.scanMap.get(t.dataset.queueText);if(q){els.manualInput.value=q.rawText||'';els.manualInput.scrollIntoView({behavior:'smooth',block:'center'});toast('OCR 원문을 직접 입력 칸에 넣었습니다.')}return}const r=e.target.closest('[data-remove-scan]');if(r)return removeScan(r.dataset.removeScan)};
-  if(els.historySearch)els.historySearch.oninput=()=>{state.historySearch=els.historySearch.value;renderHistory()};if(els.historySource)els.historySource.onchange=()=>{state.historySource=els.historySource.value;save();renderHistory()};if(els.historyImageOnly)els.historyImageOnly.onchange=()=>{state.historyImageOnly=els.historyImageOnly.checked;save();renderHistory()};if(els.refreshStorageBtn)els.refreshStorageBtn.onclick=refreshImageStorage;if(els.clearImagesBtn)els.clearImagesBtn.onclick=async()=>{if(!confirm('저장된 원본 사진을 모두 삭제할까요? 구매 번호 기록은 유지됩니다.'))return;await clearAllTicketImages();state.batches.forEach(b=>b.imageStored=false);save();renderHistory();refreshImageStorage();toast('원본 사진을 모두 삭제했습니다.')};
+  if(els.historySearch)els.historySearch.oninput=()=>{state.historySearch=els.historySearch.value;renderHistory()};if(els.historySort)els.historySort.onchange=()=>{state.historySort=els.historySort.value;save();renderHistory()};if(els.historySource)els.historySource.onchange=()=>{state.historySource=els.historySource.value;save();renderHistory()};if(els.historyImageOnly)els.historyImageOnly.onchange=()=>{state.historyImageOnly=els.historyImageOnly.checked;save();renderHistory()};if(els.refreshStorageBtn)els.refreshStorageBtn.onclick=refreshImageStorage;if(els.clearImagesBtn)els.clearImagesBtn.onclick=async()=>{if(!confirm('저장된 원본 사진을 모두 삭제할까요? 구매 번호 기록은 유지됩니다.'))return;await clearAllTicketImages();state.batches.forEach(b=>b.imageStored=false);save();renderHistory();refreshImageStorage();toast('원본 사진을 모두 삭제했습니다.')};
+  $('drawEditCloseBtn').onclick=$('drawEditCancelBtn').onclick=()=>els.drawEditDialog.close();$('drawEditSaveBtn').onclick=applyBulkDraw;if(els.undoDrawBtn)els.undoDrawBtn.onclick=undoBulkDraw;
   els.history.onclick=async e=>{const bulk=e.target.closest('[data-bulk-draw]');if(bulk){e.preventDefault();e.stopPropagation();bulkChangeDraw(bulk.dataset.bulkDraw);return}const v=e.target.closest('[data-view-image]');if(v){await openStoredImage(v.dataset.viewImage);return}const b=e.target.closest('[data-delete-batch]');if(!b)return;const id=b.dataset.deleteBatch;await deleteTicketImage(id).catch(()=>{});state.batches=state.batches.filter(x=>x.id!==id);save();renderAll();refreshImageStorage();toast('기록을 삭제했습니다.')};els.generated.onclick=e=>{const b=e.target.closest('[data-copy-game]');if(!b)return;const g=state.generated[Number(b.dataset.copyGame)];if(g)copyText(g.join(', '))};
   ['dragenter','dragover'].forEach(ev=>els.dropZone.addEventListener(ev,e=>{e.preventDefault();els.dropZone.classList.add('drag')}));['dragleave','drop'].forEach(ev=>els.dropZone.addEventListener(ev,e=>{e.preventDefault();els.dropZone.classList.remove('drag')}));els.dropZone.addEventListener('drop',e=>analyzeFiles(e.dataTransfer.files));
 
