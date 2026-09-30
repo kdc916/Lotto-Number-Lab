@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-title" content="Lotto Lab" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./icon-192.png" />
-  <title>로또 번호 랩 v0.6.0 — 구매 번호 스캔·빈도 분석·조합 생성</title>
+  <title>로또 번호 랩 v0.6.1 — 구매 번호 스캔·빈도 분석·조합 생성</title>
   <style>
     :root{
       --bg:#0d0f13; --panel:#151922; --panel2:#1b202b; --line:#2a3140;
@@ -95,7 +95,7 @@
     .history-item{padding:12px;border:1px solid var(--line);background:#11151c;border-radius:13px}
     .history-top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px}
     .history-title{font-size:12px;font-weight:900}.history-meta{color:var(--muted);font-size:10px}
-    .history-games{display:grid;gap:6px}.history-game{display:flex;gap:8px;align-items:center;color:#d8dee7;font-size:12px}.history-game span:first-child{width:18px;color:var(--muted)}.history-game .balls{display:flex;gap:6px;flex-wrap:wrap}
+    .history-games{display:grid;gap:8px}.history-game{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:8px;align-items:center;color:#d8dee7;font-size:12px}.history-game .row-label{width:22px;color:var(--muted);font-weight:800;text-align:center}.history-game .balls{display:flex;gap:6px;flex-wrap:wrap;min-width:0}.history-game .ball{flex:0 0 34px}.history-game .dup-tag{justify-self:end}
     .empty{padding:18px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px;text-align:center}
     .notice{padding:11px 12px;border-radius:12px;border:1px solid #4f4727;background:#211e12;color:#e8d99a;font-size:12px;line-height:1.5;margin-top:12px}
     .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:#202633;border:1px solid #3a4458;color:#fff;padding:11px 14px;border-radius:12px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.2s;z-index:1000;font-size:13px;max-width:min(90vw,560px)}
@@ -115,7 +115,7 @@
     .compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.compare-pass{border:1px solid var(--line);border-radius:14px;background:#11151c;overflow:hidden}.compare-pass img{width:100%;aspect-ratio:4/3;object-fit:contain;background:#080a0d;display:block}.compare-pass .info{padding:10px}.compare-pass strong{font-size:12px}.compare-pass pre{white-space:pre-wrap;word-break:break-word;max-height:160px;overflow:auto;font-size:10px;color:#aeb8c5;background:#0c0f14;border-radius:9px;padding:8px}.compare-summary{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
     .draw-auto{color:#9fd7ff;font-size:10px;font-weight:800}
     @media (max-width:940px){.grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr 1fr 1fr}.topbar{align-items:flex-start}.stats{grid-template-columns:repeat(4,1fr)}}
-    @media (max-width:640px){.app{padding:14px 12px 56px}.topbar{display:block}.badge{margin-top:10px}.actions{grid-template-columns:1fr 1fr}.actions .btn:last-child{grid-column:1/-1}.stats{grid-template-columns:1fr 1fr}.number-grid{grid-template-columns:repeat(5,1fr)}.generator{grid-template-columns:1fr}.gen-row{align-items:flex-start}.ball{width:31px;height:31px;font-size:12px}.card-b{padding:14px}.card-h{padding:14px}.rank-item{grid-template-columns:28px 38px 1fr 42px}.ticket-fields{grid-template-columns:1fr}.scan-item{grid-template-columns:72px 1fr}.scan-item img{width:72px;height:72px}.filter-grid{grid-template-columns:1fr 1fr}.analysis-panels{grid-template-columns:1fr}.compare-grid{grid-template-columns:1fr}}
+    @media (max-width:640px){.app{padding:14px 12px 56px}.topbar{display:block}.badge{margin-top:10px}.actions{grid-template-columns:1fr 1fr}.actions .btn:last-child{grid-column:1/-1}.stats{grid-template-columns:1fr 1fr}.number-grid{grid-template-columns:repeat(5,1fr)}.generator{grid-template-columns:1fr}.gen-row{align-items:flex-start}.ball{width:31px;height:31px;font-size:12px}.card-b{padding:14px}.card-h{padding:14px}.rank-item{grid-template-columns:28px 38px 1fr 42px}.ticket-fields{grid-template-columns:1fr}.scan-item{grid-template-columns:72px 1fr}.scan-item img{width:72px;height:72px}.filter-grid{grid-template-columns:1fr 1fr}.analysis-panels{grid-template-columns:1fr}.compare-grid{grid-template-columns:1fr}.history-item{padding:12px 10px}.history-game{grid-template-columns:20px minmax(0,1fr) auto;gap:6px}.history-game .row-label{width:20px}.history-game .balls{gap:5px}.history-game .ball{flex-basis:31px}.history-group-body{padding:10px}}
 
     .scan-list{display:grid;gap:10px;margin-top:12px}
     .scan-item{display:grid;grid-template-columns:88px 1fr;gap:12px;padding:10px;border:1px solid var(--line);border-radius:14px;background:#11151c}
@@ -150,7 +150,7 @@
       <h1>maxVFX 로또 번호 랩</h1>
       <p class="sub">내가 실제로 구매한 로또 6/45 번호를 사진·스크린샷·QR·직접 입력으로 모아, 아직 한 번도 안 나온 숫자와 반복 출현 숫자를 분석하고 새로운 조합을 만듭니다.</p>
     </div>
-    <div class="row"><span class="badge version">v0.6.0</span><span class="badge" id="connectionBadge"><i class="connection-dot" id="connectionDot"></i><span id="connectionText">온라인</span></span><button class="btn small install-btn" id="installBtn">＋ 앱 설치</button><span class="badge">🔒 데이터는 이 브라우저에만 저장</span></div>
+    <div class="row"><span class="badge version">v0.6.1</span><span class="badge" id="connectionBadge"><i class="connection-dot" id="connectionDot"></i><span id="connectionText">온라인</span></span><button class="btn small install-btn" id="installBtn">＋ 앱 설치</button><span class="badge">🔒 데이터는 이 브라우저에만 저장</span></div>
   </header>
 
   <nav class="mobile-tabs" id="mobileTabs" aria-label="모바일 메뉴">
@@ -183,7 +183,7 @@
           <div class="section-title"><span>스캔 큐</span><span class="badge" id="scanQueueCount">0개</span></div>
           <div class="scan-list" id="scanQueue"></div>
           <div class="progress" id="progress"><div class="progress-line"><i id="progressBar"></i></div><div class="progress-txt" id="progressText">분석 준비</div></div>
-          <div class="notice">OCR은 촬영 각도·빛 번짐·영수증 인쇄 상태에 따라 오인식할 수 있습니다. v0.6.0은 A~E 게임 행 우선 검출, 다중 OCR 합의, 회차 후보 자동 인식을 적용합니다. 그래도 결과가 이상하면 “영역 조정”에서 네 모서리를 직접 맞춘 뒤 재스캔하세요.</div>
+          <div class="notice">OCR은 촬영 각도·빛 번짐·영수증 인쇄 상태에 따라 오인식할 수 있습니다. v0.6.1은 A~E 게임 행 우선 검출, 다중 OCR 합의, 회차 후보 자동 인식을 적용합니다. 그래도 결과가 이상하면 “영역 조정”에서 네 모서리를 직접 맞춘 뒤 재스캔하세요.</div>
         </div>
       </section>
 
@@ -300,7 +300,7 @@
     </aside>
   </div>
 
-  <p class="footer">v0.6.0 · 모바일 탭 UI, 최근 기록 분석 필터, 생성 조합 설명, 당첨번호 비교, 컬러 번호볼, PWA, OCR 3-Pass 분석을 지원합니다. OCR 언어/엔진 데이터는 최초 사용 시 인터넷 연결이 필요할 수 있습니다.</p>
+  <p class="footer">v0.6.1 · 모바일 탭 UI, 최근 기록 분석 필터, 생성 조합 설명, 당첨번호 비교, 컬러 번호볼, PWA, OCR 3-Pass 분석을 지원합니다. OCR 언어/엔진 데이터는 최초 사용 시 인터넷 연결이 필요할 수 있습니다.</p>
 </div>
 
 <dialog id="cameraDialog">
@@ -404,7 +404,7 @@
     const batches=Array.isArray(raw?.batches)?raw.batches.map(sanitizeBatch).filter(Boolean):[];
     state.batches=batches;state.drawResults=Array.isArray(raw?.drawResults)?raw.drawResults.map(sanitizeDrawResult).filter(Boolean):[];state.analysisScope=String(raw?.analysisScope||'all');
     if(els.analysisScope)els.analysisScope.value=[...els.analysisScope.options].some(o=>o.value===state.analysisScope)?state.analysisScope:'all';
-    if(migrated&&batches.length){save();setTimeout(()=>toast(`기존 버전 기록 ${batches.length}건을 v0.6.0으로 자동 이전했습니다.`),450)}
+    if(migrated&&batches.length){save();setTimeout(()=>toast(`기존 버전 기록 ${batches.length}건을 v0.6.1으로 자동 이전했습니다.`),450)}
   }
 
   const IMG_DB='lotto-number-lab-images-v1', IMG_STORE='ticket-images';
@@ -746,7 +746,7 @@
     if(!state.batches.length){els.history.innerHTML='<div class="empty">아직 등록된 구매 번호가 없습니다.</div>';return}
     const groups=new Map();for(const b of state.batches){const k=b.draw?String(b.draw):'unknown';if(!groups.has(k))groups.set(k,[]);groups.get(k).push(b)}
     const entries=[...groups.entries()].sort((a,b)=>{if(a[0]==='unknown')return 1;if(b[0]==='unknown')return -1;return Number(b[0])-Number(a[0])});
-    els.history.innerHTML=entries.map(([draw,batches])=>{const dup=duplicateMapForBatches(batches),dupKeys=[...dup].filter(([,c])=>c>1),gameCount=batches.reduce((s,b)=>s+b.games.length,0);return `<details class="history-group" open><summary><span>${draw==='unknown'?'회차 미입력':`${draw}회`} · ${batches.length}장 · ${gameCount}게임</span><span class="badge">${dupKeys.length?`중복 ${dupKeys.length}종`:'중복 없음'}</span></summary><div class="history-group-body">${dupKeys.length?`<div class="dup-warn">⚠ 같은 회차에서 동일한 번호 조합이 반복 등록되어 있습니다: ${dupKeys.slice(0,5).map(([k,c])=>`${k.replaceAll('-', ' · ')} ×${c}`).join(' / ')}</div>`:''}${batches.map(b=>{const d=new Date(b.createdAt),src={qr:'QR','qr-camera':'카메라 QR',ocr:'OCR',manual:'직접 입력',import:'가져오기'}[b.source]||b.source;return `<div class="history-item ${b.games.some(g=>(dup.get(gameKey(g))||0)>1)?'dup-hit':''}"><div class="history-top"><div><div class="history-title">${b.memo?esc(b.memo):'구매 기록'}</div><div class="history-meta">${src} · ${d.toLocaleString('ko-KR')}</div></div><div class="row">${b.imageStored?`<button class="btn small" data-view-image="${b.id}">원본 보기</button>`:''}<button class="btn small danger" data-delete-batch="${b.id}">삭제</button></div></div><div class="history-games">${b.games.map((g,i)=>`<div class="history-game"><span>${String.fromCharCode(65+i)}</span><div class="balls">${g.map(n=>ballHTML(n)).join('')}</div>${(dup.get(gameKey(g))||0)>1?'<span class="dup-tag">중복</span>':''}</div>`).join('')}</div></div>`}).join('')}</div></details>`}).join('')
+    els.history.innerHTML=entries.map(([draw,batches])=>{const dup=duplicateMapForBatches(batches),dupKeys=[...dup].filter(([,c])=>c>1),gameCount=batches.reduce((s,b)=>s+b.games.length,0);return `<details class="history-group" open><summary><span>${draw==='unknown'?'회차 미입력':`${draw}회`} · ${batches.length}장 · ${gameCount}게임</span><span class="badge">${dupKeys.length?`중복 ${dupKeys.length}종`:'중복 없음'}</span></summary><div class="history-group-body">${dupKeys.length?`<div class="dup-warn">⚠ 같은 회차에서 동일한 번호 조합이 반복 등록되어 있습니다: ${dupKeys.slice(0,5).map(([k,c])=>`${k.replaceAll('-', ' · ')} ×${c}`).join(' / ')}</div>`:''}${batches.map(b=>{const d=new Date(b.createdAt),src={qr:'QR','qr-camera':'카메라 QR',ocr:'OCR',manual:'직접 입력',import:'가져오기'}[b.source]||b.source;return `<div class="history-item ${b.games.some(g=>(dup.get(gameKey(g))||0)>1)?'dup-hit':''}"><div class="history-top"><div><div class="history-title">${b.memo?esc(b.memo):'구매 기록'}</div><div class="history-meta">${src} · ${d.toLocaleString('ko-KR')}</div></div><div class="row">${b.imageStored?`<button class="btn small" data-view-image="${b.id}">원본 보기</button>`:''}<button class="btn small danger" data-delete-batch="${b.id}">삭제</button></div></div><div class="history-games">${b.games.map((g,i)=>`<div class="history-game"><span class="row-label">${String.fromCharCode(65+i)}</span><div class="balls">${g.map(n=>ballHTML(n)).join('')}</div>${(dup.get(gameKey(g))||0)>1?'<span class="dup-tag">중복</span>':''}</div>`).join('')}</div></div>`}).join('')}</div></details>`}).join('')
   }
 
   function weightedPick(items,weightFn,count){const pool=[...items],out=[];while(pool.length&&out.length<count){const ws=pool.map(x=>Math.max(.001,weightFn(x))),sum=ws.reduce((a,b)=>a+b,0);let r=secureRandom()*sum,idx=0;for(;idx<pool.length;idx++){r-=ws[idx];if(r<=0)break}idx=Math.min(idx,pool.length-1);out.push(pool[idx]);pool.splice(idx,1)}return out}
