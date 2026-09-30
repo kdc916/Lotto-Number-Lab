@@ -485,3 +485,16 @@ QR이 없는 사진 OCR 결과에서 3~4자리 회차 후보를 찾는 보조 �
 - `.history-game span:first-child` 같은 범용 descendant 선택자를 다시 사용하지 않는다.
 - 행 라벨 스타일은 `.row-label`만 대상으로 한다.
 - 번호 볼은 `.ball`의 width/height/flex-basis를 동일 값으로 유지한다.
+
+
+---
+
+# v0.7.0 Management & Update UX Patch
+- 구매 기록 회차/메모/번호 검색.
+- 입력 방식 및 원본 사진 보관 여부 필터.
+- 회차 그룹 일괄 수정.
+- IndexedDB 원본 사진 장수/용량 표시 및 전체 사진 삭제.
+- 당첨 결과 1~5등 누적 요약.
+- PWA 업데이트 확인 / 새 버전 적용 버튼.
+- Service Worker v070 캐시 + SKIP_WAITING.
+- 저장 키 v070, v060 이하 자동 마이그레이션.
