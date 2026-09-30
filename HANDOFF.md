@@ -466,3 +466,22 @@ QR이 없는 사진 OCR 결과에서 3~4자리 회차 후보를 찾는 보조 �
 - v0.5.0 이하 기록 자동 마이그레이션.
 
 동행복권 공식 사이트는 CORS/접속 대기/차단 정책 때문에 브라우저 자동 fetch가 실패할 수 있다. 이 경우 공식 회차별 추첨결과 페이지를 새 탭으로 열어 사용자가 확인하도록 한다.
+
+
+---
+
+# v0.6.1 Mobile Number Ball Hotfix
+
+## 변경 내용
+- 구매 기록의 첫 번째 로또 번호 볼이 찌그러지는 CSS 선택자 회귀 수정.
+- 원인: `.history-game span:first-child`가 A~E 라벨뿐 아니라 첫 번째 번호 볼 내부 span까지 선택할 수 있었음.
+- A~E 라벨에 `.row-label` 전용 클래스를 부여해 구조적으로 분리.
+- 기록 한 행을 CSS Grid로 변경해 라벨 / 번호 볼 / 중복 태그 영역을 안정적으로 배치.
+- 모바일에서 번호 볼 flex-basis 고정 및 gap/padding 조정으로 원형 유지.
+- PWA 캐시를 v061로 갱신해 이전 스타일 캐시를 제거.
+- 데이터 저장 키는 `lotto-number-lab-v060`을 그대로 유지해 데이터 마이그레이션 없이 hotfix 적용.
+
+## 회귀 방지
+- `.history-game span:first-child` 같은 범용 descendant 선택자를 다시 사용하지 않는다.
+- 행 라벨 스타일은 `.row-label`만 대상으로 한다.
+- 번호 볼은 `.ball`의 width/height/flex-basis를 동일 값으로 유지한다.
