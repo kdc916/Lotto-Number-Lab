@@ -176,7 +176,7 @@
 </div>
 
 <div class="simple-shell" id="simpleShell" hidden>
-  <header class="simple-head"><div><span class="badge version">v0.10.1 · Simple</span><h1>빠른 로또 번호 분석</h1><p class="sub">촬영하거나 QR을 읽으면 현재 스캔한 번호만 기준으로 바로 분석합니다. 기록 저장 없이 가볍게 사용할 수 있습니다.</p></div><div class="row"><button class="btn small mode-switch" id="simpleModeBtn">모드 선택</button><button class="btn small" id="simpleResetBtn">새 분석</button></div></header>
+  <header class="simple-head"><div><span class="badge version">v0.10.2 · Simple</span><h1>빠른 로또 번호 분석</h1><p class="sub">촬영하거나 QR을 읽으면 현재 스캔한 번호만 기준으로 바로 분석합니다. 기록 저장 없이 가볍게 사용할 수 있습니다.</p></div><div class="row"><button class="btn small mode-switch" id="simpleModeBtn">모드 선택</button><button class="btn small" id="simpleResetBtn">새 분석</button></div></header>
   <div class="simple-grid">
     <section class="simple-card full"><h2>1. 번호 스캔</h2><div class="simple-actions"><button class="btn blue" id="simpleUploadBtn">🖼️ 사진 / 스크린샷</button><button class="btn" id="simpleCaptureBtn">📷 바로 촬영</button><button class="btn" id="simpleQrBtn">▦ QR 촬영</button></div><div class="simple-manual"><input id="simpleManualInput" type="text" placeholder="직접 번호 입력 예: 3 4 8 39 44 45"><button class="btn small" id="simpleManualBtn">번호 적용</button></div><div class="simple-status" id="simpleStatus">사진·QR·번호 중 하나를 입력하세요. 여러 장을 연속으로 스캔해도 누적 분석됩니다.</div></section>
     <section class="simple-card"><h2>2. 빠른 결과</h2><div class="simple-summary"><div class="simple-stat"><b id="simpleTicketCount">0</b><span>인식 티켓</span></div><div class="simple-stat"><b id="simpleGameCount">0</b><span>인식 게임</span></div><div class="simple-stat"><b id="simpleUsedCount">0</b><span>사용 숫자</span></div></div><div class="section-title"><span>중복 많은 번호</span><span id="simpleDupCount">0개</span></div><div class="simple-result-list" id="simpleDuplicate"></div><div class="section-title"><span>한 번도 안 나온 번호</span><span id="simpleUnseenCount">45개</span></div><div class="simple-result-list" id="simpleUnseen"></div></section>
@@ -191,7 +191,7 @@
       <h1>maxVFX 로또 번호 랩</h1>
       <p class="sub">내가 실제로 구매한 로또 6/45 번호를 사진·스크린샷·QR·직접 입력으로 모아, 아직 한 번도 안 나온 숫자와 반복 출현 숫자를 분석하고 새로운 조합을 만듭니다.</p>
     </div>
-    <div class="row"><span class="badge version">v0.10.1</span><button class="btn small mode-switch" id="proModeBtn">모드 선택</button><span class="badge" id="connectionBadge"><i class="connection-dot" id="connectionDot"></i><span id="connectionText">온라인</span></span><button class="btn small install-btn" id="installBtn">＋ 앱 설치</button><button class="btn small" id="checkUpdateBtn">업데이트 확인</button><button class="btn small primary update-btn" id="applyUpdateBtn" hidden>새 버전 적용</button><span class="badge">🔒 데이터는 이 브라우저에만 저장</span></div>
+    <div class="row"><span class="badge version">v0.10.2</span><button class="btn small mode-switch" id="proModeBtn">모드 선택</button><span class="badge" id="connectionBadge"><i class="connection-dot" id="connectionDot"></i><span id="connectionText">온라인</span></span><button class="btn small install-btn" id="installBtn">＋ 앱 설치</button><button class="btn small" id="checkUpdateBtn">업데이트 확인</button><button class="btn small primary update-btn" id="applyUpdateBtn" hidden>새 버전 적용</button><span class="badge">🔒 데이터는 이 브라우저에만 저장</span></div>
   </header>
 
   <nav class="mobile-tabs" id="mobileTabs" aria-label="모바일 메뉴">
@@ -225,7 +225,7 @@
           <div class="section-title"><span>스캔 큐</span><span class="badge" id="scanQueueCount">0개</span></div>
           <div class="scan-list" id="scanQueue"></div>
           <div class="progress" id="progress"><div class="progress-line"><i id="progressBar"></i></div><div class="progress-txt" id="progressText">분석 준비</div></div>
-          <div class="notice">OCR은 촬영 각도·빛 번짐·영수증 인쇄 상태에 따라 오인식할 수 있습니다. v0.10.1은 Simple/Pro 모드와 A~E 게임 행 우선 검출, 다중 OCR 합의, 회차 후보 자동 인식과 기록 완전 백업을 지원합니다. 그래도 결과가 이상하면 “영역 조정”에서 네 모서리를 직접 맞춘 뒤 재스캔하세요.</div>
+          <div class="notice">OCR은 촬영 각도·빛 번짐·영수증 인쇄 상태에 따라 오인식할 수 있습니다. v0.10.2는 Simple/Pro 모드와 A~E 게임 행 우선 검출, 다중 OCR 합의, 회차 후보 자동 인식과 기록 완전 백업을 지원합니다. 그래도 결과가 이상하면 “영역 조정”에서 네 모서리를 직접 맞춘 뒤 재스캔하세요.</div>
         </div>
       </section>
 
@@ -347,7 +347,7 @@
     </aside>
   </div>
 
-  <p class="footer">v0.10.1 · Simple/Pro + 스크린샷 OCR 보강 · 기록 다중 선택/일괄 삭제, 구매 태그, 당첨 성과 차트, 원본 사진 포함 완전 백업/복원을 지원합니다. OCR 언어/엔진 데이터는 최초 사용 시 인터넷 연결이 필요할 수 있습니다.</p>
+  <p class="footer">v0.10.2 · Simple/Pro + 스크린샷 OCR 보강 · 기록 다중 선택/일괄 삭제, 구매 태그, 당첨 성과 차트, 원본 사진 포함 완전 백업/복원을 지원합니다. OCR 언어/엔진 데이터는 최초 사용 시 인터넷 연결이 필요할 수 있습니다.</p>
 </div>
 
 <dialog id="cameraDialog">
@@ -399,7 +399,7 @@
 (() => {
   'use strict';
 
-  const VERSION='0.10.1';
+  const VERSION='0.10.2';
   const STORAGE_KEY='lotto-number-lab-v0100';
   const LEGACY_KEYS=['lotto-number-lab-v090','lotto-number-lab-v080','lotto-number-lab-v070','lotto-number-lab-v060','lotto-number-lab-v050','lotto-number-lab-v040','lotto-number-lab-v030','lotto-number-lab-v020','lotto-number-lab-v010'];
   const state={
@@ -655,8 +655,41 @@
     state.staged=[];save();renderCandidates();renderAll();toast(`${added}장 등록${dupGames?` · 같은 회차 중복 조합 ${dupGames}게임 경고`:''}${skipped?` · 중복 QR ${skipped}장 제외`:''}`)
   }
 
+  function isLikelyImageFile(file){
+    if(!file)return false;
+    if(String(file.type||'').toLowerCase().startsWith('image/'))return true;
+    const name=String(file.name||'').toLowerCase();
+    if(/\.(png|jpe?g|webp|gif|bmp|avif|heic|heif)$/i.test(name))return true;
+    // 일부 모바일/PWA 공유 경로는 File.type을 비워서 전달한다. 빈 MIME은 실제 디코딩 단계에서 한 번 더 확인한다.
+    return !file.type;
+  }
+
+  function loadBlobImage(blob){
+    return new Promise((resolve,reject)=>{
+      const url=URL.createObjectURL(blob),img=new Image();
+      const done=()=>URL.revokeObjectURL(url);
+      img.onload=()=>{done();resolve(img)};
+      img.onerror=()=>{done();reject(new Error('브라우저가 이 이미지 형식을 열지 못했습니다. PNG/JPG/WebP로 다시 저장해 주세요.'))};
+      img.src=url;
+    });
+  }
+
   async function fileToCanvas(file){
-    const bmp=await createImageBitmap(file);const max=2200;const scale=Math.min(1,max/Math.max(bmp.width,bmp.height));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(bmp.width*scale));c.height=Math.max(1,Math.round(bmp.height*scale));c.getContext('2d',{willReadFrequently:true}).drawImage(bmp,0,0,c.width,c.height);bmp.close?.();return c;
+    if(!file)throw new Error('이미지 파일이 전달되지 않았습니다.');
+    let source=null,width=0,height=0,closeSource=null,bitmapError=null;
+    if(typeof createImageBitmap==='function'){
+      try{
+        source=await createImageBitmap(file);width=source.width;height=source.height;closeSource=()=>source.close?.();
+      }catch(e){bitmapError=e;console.warn('createImageBitmap decode failed, fallback to Image()',e)}
+    }
+    if(!source){
+      try{source=await loadBlobImage(file);width=source.naturalWidth||source.width;height=source.naturalHeight||source.height}
+      catch(e){throw new Error(`${e.message}${bitmapError?' (고속 디코더도 실패)':''}`)}
+    }
+    if(!width||!height)throw new Error('이미지 크기를 읽지 못했습니다.');
+    const max=2200,scale=Math.min(1,max/Math.max(width,height)),c=document.createElement('canvas');
+    c.width=Math.max(1,Math.round(width*scale));c.height=Math.max(1,Math.round(height*scale));
+    c.getContext('2d',{willReadFrequently:true}).drawImage(source,0,0,c.width,c.height);closeSource?.();return c;
   }
 
   async function decodeQrFromCanvas(canvas){
@@ -763,16 +796,18 @@
     let bestCount=Math.max(0,...results.map(r=>r.rows.length));
     if(bestCount<2){
       const rescueCanvas=makeScreenshotNumberCanvas(src);
-      const r=await recognizePrepared(rescueCanvas,p=>progressCb?.(88+Math.round(p*.12),`스크린샷 숫자 영역 ${p}%`),'6');
+      const r=await recognizePrepared(rescueCanvas,p=>progressCb?.(88+Math.round(p*.7),`스크린샷 숫자 영역 ${p}%`),'6');
       const parsed=parseLottoRows(r.text,{strict:false});
       results.push({name:'스크린샷 숫자 영역',text:r.text,confidence:r.confidence,canvas:rescueCanvas,...parsed});bestCount=Math.max(bestCount,parsed.rows.length);
-      if(bestCount<1){
-        const sparse=await recognizePrepared(rescueCanvas,p=>progressCb?.(94+Math.round(p*.06),`희소 텍스트 구조 ${p}%`),'11');
+      // 2게임 미만이면 sparse text 모드를 반드시 실행한다. 한 줄만 읽힌 경우에도 두 번째 행을 구조 복구할 수 있게 한다.
+      if(bestCount<2){
+        const sparse=await recognizePrepared(rescueCanvas,p=>progressCb?.(95+Math.round(p*.05),`희소 텍스트 구조 ${p}%`),'11');
         const sparseParsed=parseLottoRows(sparse.text,{strict:false});
-        results.push({name:'희소 텍스트 구조',text:sparse.text,confidence:sparse.confidence,canvas:rescueCanvas,...sparseParsed});
+        results.push({name:'희소 텍스트 구조',text:sparse.text,confidence:sparse.confidence,canvas:rescueCanvas,...sparseParsed});bestCount=Math.max(bestCount,sparseParsed.rows.length);
       }
     }
-    const ranked=[...results].sort((a,b)=>(b.labeledRows*38+b.rows.length*22+b.confidence)-(a.labeledRows*38+a.rows.length*22+a.confidence));
+    // 완성된 게임 행 수를 최우선으로 선택해 2행 스크린샷에서 한 행만 채택되는 문제를 방지한다.
+    const ranked=[...results].sort((a,b)=>(b.rows.length-a.rows.length)||(b.labeledRows-a.labeledRows)||(b.confidence-a.confidence));
     const base=ranked[0]||{rows:[],labeledRows:0,confidence:0,name:'OCR'};
     const selected=[];let voteTotal=0;
     for(const row of base.rows){
@@ -782,6 +817,9 @@
       if(keep){selected.push({...row,votes});voteTotal+=votes}
     }
     if(!selected.length&&base.rows.length){for(const row of base.rows){selected.push({...row,votes:1});voteTotal++}}
+    else if(base.rows.length>=2&&selected.length<base.rows.length){
+      for(const row of base.rows){if(!selected.some(x=>sameGame(x.game,row.game))){selected.push({...row,votes:1});voteTotal++}}
+    }
     const games=selected.slice(0,5).map(r=>r.game),labeledRows=selected.slice(0,5).filter(r=>r.label).length;
     const agreement=games.length?Math.round((voteTotal/(games.length*Math.max(1,results.length)))*100):0;
     const avgConf=results.length?results.reduce((a,r)=>a+r.confidence,0)/results.length:0;
@@ -823,10 +861,33 @@
   }
 
   async function analyzeFiles(files){
-    const arr=[...files].filter(f=>f?.type?.startsWith('image/'));if(!arr.length)return;
+    // FileList는 input.value='' 처리 시 브라우저에 따라 비워질 수 있으므로 즉시 독립 배열로 복사한다.
+    const incoming=Array.from(files||[]);
+    if(!incoming.length){toast('선택된 이미지가 없습니다. 다시 선택해 주세요.');return}
+    const arr=incoming.filter(isLikelyImageFile);
+    if(!arr.length){toast('지원 가능한 이미지 파일을 찾지 못했습니다. PNG/JPG/WebP 이미지를 선택해 주세요.');return}
     setProgress(true,2,`${arr.length}개 이미지 준비 중…`);
-    for(const file of arr){try{const canvas=await fileToCanvas(file);queueItem(file,canvas)}catch(e){console.warn(e)}}
-    const pending=state.scanQueue.filter(q=>q.status==='대기');let idx=0;for(const item of pending){idx++;setProgress(true,Math.round((idx-1)/pending.length*100),`${idx}/${pending.length} · ${item.name} 분석 중…`);await processScanItem(item)}setProgress(false);toast(`${pending.length}개 이미지 분석을 마쳤습니다.`)
+    let queued=0,failed=0;const failures=[];
+    for(const file of arr){
+      try{const canvas=await fileToCanvas(file);queueItem(file,canvas);queued++}
+      catch(e){failed++;failures.push(`${file.name||'이미지'}: ${e.message||'열기 실패'}`);console.warn('image decode failed',file?.name,e)}
+    }
+    if(!queued){
+      setProgress(false);
+      const msg=failures[0]||'브라우저가 선택한 이미지를 열지 못했습니다.';
+      toast(`이미지를 분석 큐에 넣지 못했습니다. ${msg}`);
+      if(els.simpleStatus)els.simpleStatus.textContent=`이미지 열기 실패 · ${msg}`;
+      return
+    }
+    const pending=state.scanQueue.filter(q=>q.status==='waiting');let idx=0;
+    for(const item of pending){
+      idx++;setProgress(true,Math.round((idx-1)/pending.length*100),`${idx}/${pending.length} · ${item.name} 분석 중…`);
+      await processScanItem(item)
+    }
+    setProgress(false);
+    const suffix=failed?` · ${failed}개 파일 열기 실패`:'';
+    toast(`${pending.length}개 이미지 분석 완료${suffix}`);
+    if(state.appMode==='simple'&&els.simpleStatus)els.simpleStatus.textContent=`${pending.length}개 이미지 분석 완료${suffix} · ${state.staged.reduce((n,t)=>n+t.games.length,0)}게임 인식`;
   }
 
   function removeScan(id){const q=state.scanMap.get(id);if(!q)return;if(q.stagedTicketId)state.staged=state.staged.filter(t=>t.id!==q.stagedTicketId);URL.revokeObjectURL(q.previewUrl);state.scanQueue=state.scanQueue.filter(x=>x.id!==id);state.scanMap.delete(id);renderScanQueue();renderCandidates()}
@@ -992,7 +1053,9 @@
   $('chooseSimpleBtn').onclick=()=>setAppMode('simple');$('chooseProBtn').onclick=()=>setAppMode('pro');$('simpleModeBtn').onclick=showModeGate;$('proModeBtn').onclick=showModeGate;
   $('simpleUploadBtn').onclick=()=>els.fileInput.click();$('simpleCaptureBtn').onclick=()=>els.cameraInput.click();$('simpleQrBtn').onclick=startLiveQr;$('simpleResetBtn').onclick=resetSimpleAnalysis;$('simpleManualBtn').onclick=simpleManualApply;$('simpleRegenerateBtn').onclick=()=>{state.simpleGenerated=buildSimpleCombinations(5);renderSimpleGenerated()};$('simpleToProBtn').onclick=()=>setAppMode('pro');
   els.simpleManualInput?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();simpleManualApply()}});els.simpleGenerated?.addEventListener('click',e=>{const b=e.target.closest('[data-simple-copy]');if(!b)return;const g=state.simpleGenerated[Number(b.dataset.simpleCopy)];if(g)copyText(g.join(', '))});
-  $('uploadBtn').onclick=()=>els.fileInput.click();$('captureBtn').onclick=()=>els.cameraInput.click();$('liveQrBtn').onclick=startLiveQr;els.fileInput.onchange=e=>{analyzeFiles(e.target.files);e.target.value=''};els.cameraInput.onchange=e=>{analyzeFiles(e.target.files);e.target.value=''};
+  $('uploadBtn').onclick=()=>els.fileInput.click();$('captureBtn').onclick=()=>els.cameraInput.click();$('liveQrBtn').onclick=startLiveQr;
+  const handleImageInput=e=>{const files=Array.from(e.target.files||[]);e.target.value='';analyzeFiles(files)};
+  els.fileInput.onchange=handleImageInput;els.cameraInput.onchange=handleImageInput;
   $('parseManualBtn').onclick=()=>{const raw=els.manualInput.value.trim();if(!raw)return toast('번호 또는 QR 문자열을 입력해 주세요.');const q=parseQrPayload(raw);if(q)stageTicket({games:q.games,draw:q.draw,source:'qr',qrKey:q.qrKey,confidence:100,label:`직접 입력 QR ${q.draw}회`,memo:els.memoInput.value.trim()});else{const games=parseTextGames(raw);stageTicket({games,draw:els.drawInput.value||null,source:'manual',label:'직접 입력',memo:els.memoInput.value.trim(),rawText:raw})}};
   $('clearManualBtn').onclick=()=>{els.manualInput.value='';els.drawInput.value='';els.memoInput.value=''};$('addCandidatesBtn').onclick=addCandidates;$('clearCandidatesBtn').onclick=()=>{state.staged=[];renderCandidates()};
   $('generateBtn').onclick=generate;$('exportBtn').onclick=exportJson;$('csvExportBtn').onclick=exportCsv;$('importBtn').onclick=()=>els.importInput.click();els.importInput.onchange=e=>{if(e.target.files?.[0])importJsonFile(e.target.files[0]);e.target.value=''};$('copyAllBtn').onclick=()=>copyText(state.generated.map((g,i)=>`${i+1}. ${g.join(', ')}`).join('\n'));
