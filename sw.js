@@ -1,5 +1,5 @@
-const SHELL_CACHE='lotto-number-lab-v0103-shell';
-const RUNTIME_CACHE='lotto-number-lab-v0103-runtime';
+const SHELL_CACHE='lotto-number-lab-v0104-shell';
+const RUNTIME_CACHE='lotto-number-lab-v0104-runtime';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 
 self.addEventListener('install',event=>{
@@ -9,7 +9,7 @@ self.addEventListener('install',event=>{
 self.addEventListener('activate',event=>{
   event.waitUntil((async()=>{
     const keys=await caches.keys();
-    await Promise.all(keys.filter(k=>k.startsWith('lotto-number-lab-')&&!['lotto-number-lab-v0103-shell','lotto-number-lab-v0103-runtime'].includes(k)).map(k=>caches.delete(k)));
+    await Promise.all(keys.filter(k=>k.startsWith('lotto-number-lab-')&&!['lotto-number-lab-v0104-shell','lotto-number-lab-v0104-runtime'].includes(k)).map(k=>caches.delete(k)));
     await self.clients.claim();
   })());
 });
