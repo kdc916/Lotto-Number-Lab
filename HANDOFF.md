@@ -934,3 +934,12 @@ Simple/Pro 공통 OCR에서 모바일/웹 스크린샷처럼 A/B 라벨, `자동
 - 중복 번호 전체를 스크롤 가능한 목록으로 표시하여 기존 상위 15개 제한 제거.
 - 데이터 스키마 변경 없음. STORAGE_KEY는 `lotto-number-lab-v0100` 유지.
 - PWA 캐시만 `v0104`로 갱신.
+
+
+## v0.10.5 - Simple Default Landing Patch
+- 기본 진입 화면을 Simple 모드로 변경.
+- 최초 접속 시 Simple/Pro 선택 게이트를 자동으로 띄우지 않음.
+- HTML 초기 상태부터 Simple 화면을 노출해 모드 선택 화면이 잠깐 보이는 플래시를 방지.
+- Simple/Pro 상단의 `모드 선택` 버튼은 유지해 언제든 두 모드를 전환 가능.
+- Pro 기능과 기존 저장 데이터 구조는 변경하지 않음.
+- Service Worker 캐시 키를 v0105로 갱신.

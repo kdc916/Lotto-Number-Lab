@@ -162,8 +162,8 @@
 
   </style>
 </head>
-<body>
-<div class="mode-gate" id="modeGate">
+<body class="mode-simple">
+<div class="mode-gate" id="modeGate" hidden>
   <div class="mode-card">
     <span class="badge version">maxVFX Lotto Number Lab</span>
     <h2>어떤 방식으로 사용할까요?</h2>
@@ -175,8 +175,8 @@
   </div>
 </div>
 
-<div class="simple-shell" id="simpleShell" hidden>
-  <header class="simple-head"><div><span class="badge version">v0.10.4 · Simple</span><h1>빠른 로또 번호 분석</h1><p class="sub">촬영하거나 QR을 읽으면 현재 스캔한 번호만 기준으로 바로 분석합니다. 기록 저장 없이 가볍게 사용할 수 있습니다.</p></div><div class="row"><button class="btn small mode-switch" id="simpleModeBtn">모드 선택</button><button class="btn small" id="simpleResetBtn">새 분석</button></div></header>
+<div class="simple-shell" id="simpleShell">
+  <header class="simple-head"><div><span class="badge version">v0.10.5 · Simple</span><h1>빠른 로또 번호 분석</h1><p class="sub">촬영하거나 QR을 읽으면 현재 스캔한 번호만 기준으로 바로 분석합니다. 기록 저장 없이 가볍게 사용할 수 있습니다.</p></div><div class="row"><button class="btn small mode-switch" id="simpleModeBtn">모드 선택</button><button class="btn small" id="simpleResetBtn">새 분석</button></div></header>
   <div class="simple-grid">
     <section class="simple-card full"><h2>1. 번호 스캔</h2><div class="simple-actions"><button class="btn blue" id="simpleUploadBtn">🖼️ 사진 / 스크린샷</button><button class="btn" id="simpleCaptureBtn">📷 바로 촬영</button><button class="btn" id="simpleQrBtn">▦ QR 촬영</button></div><div class="simple-manual"><input id="simpleManualInput" type="text" placeholder="직접 번호 입력 예: 3 4 8 39 44 45"><button class="btn small" id="simpleManualBtn">번호 적용</button></div><div class="simple-status" id="simpleStatus">사진·QR·번호 중 하나를 입력하세요. 여러 장을 연속으로 스캔해도 누적 분석됩니다.</div></section>
     <section class="simple-card"><h2>2. 빠른 결과</h2><div class="simple-summary"><div class="simple-stat"><b id="simpleTicketCount">0</b><span>인식 티켓</span></div><div class="simple-stat"><b id="simpleGameCount">0</b><span>인식 게임</span></div><div class="simple-stat"><b id="simpleUsedCount">0</b><span>사용 숫자</span></div></div><div class="section-title"><span>중복 많은 번호</span><span id="simpleDupCount">0개 · 최대 0회</span></div><div class="rank simple-dup-chart" id="simpleDuplicate"></div><div class="section-title"><span>한 번도 안 나온 번호</span><span id="simpleUnseenCount">45개</span></div><div class="simple-result-list" id="simpleUnseen"></div></section>
@@ -191,7 +191,7 @@
       <h1>maxVFX 로또 번호 랩</h1>
       <p class="sub">내가 실제로 구매한 로또 6/45 번호를 사진·스크린샷·QR·직접 입력으로 모아, 아직 한 번도 안 나온 숫자와 반복 출현 숫자를 분석하고 새로운 조합을 만듭니다.</p>
     </div>
-    <div class="row"><span class="badge version">v0.10.4</span><button class="btn small mode-switch" id="proModeBtn">모드 선택</button><span class="badge" id="connectionBadge"><i class="connection-dot" id="connectionDot"></i><span id="connectionText">온라인</span></span><button class="btn small install-btn" id="installBtn">＋ 앱 설치</button><button class="btn small" id="checkUpdateBtn">업데이트 확인</button><button class="btn small primary update-btn" id="applyUpdateBtn" hidden>새 버전 적용</button><span class="badge">🔒 데이터는 이 브라우저에만 저장</span></div>
+    <div class="row"><span class="badge version">v0.10.5</span><button class="btn small mode-switch" id="proModeBtn">모드 선택</button><span class="badge" id="connectionBadge"><i class="connection-dot" id="connectionDot"></i><span id="connectionText">온라인</span></span><button class="btn small install-btn" id="installBtn">＋ 앱 설치</button><button class="btn small" id="checkUpdateBtn">업데이트 확인</button><button class="btn small primary update-btn" id="applyUpdateBtn" hidden>새 버전 적용</button><span class="badge">🔒 데이터는 이 브라우저에만 저장</span></div>
   </header>
 
   <nav class="mobile-tabs" id="mobileTabs" aria-label="모바일 메뉴">
@@ -225,7 +225,7 @@
           <div class="section-title"><span>스캔 큐</span><span class="badge" id="scanQueueCount">0개</span></div>
           <div class="scan-list" id="scanQueue"></div>
           <div class="progress" id="progress"><div class="progress-line"><i id="progressBar"></i></div><div class="progress-txt" id="progressText">분석 준비</div></div>
-          <div class="notice">OCR은 촬영 각도·빛 번짐·영수증 인쇄 상태에 따라 오인식할 수 있습니다. v0.10.4은 Simple/Pro 모드와 A~E 게임 행 우선 검출, 다중 OCR 합의, 회차 후보 자동 인식과 기록 완전 백업을 지원합니다. 그래도 결과가 이상하면 “영역 조정”에서 네 모서리를 직접 맞춘 뒤 재스캔하세요.</div>
+          <div class="notice">OCR은 촬영 각도·빛 번짐·영수증 인쇄 상태에 따라 오인식할 수 있습니다. v0.10.5은 Simple/Pro 모드와 A~E 게임 행 우선 검출, 다중 OCR 합의, 회차 후보 자동 인식과 기록 완전 백업을 지원합니다. 그래도 결과가 이상하면 “영역 조정”에서 네 모서리를 직접 맞춘 뒤 재스캔하세요.</div>
         </div>
       </section>
 
@@ -347,7 +347,7 @@
     </aside>
   </div>
 
-  <p class="footer">v0.10.4 · Simple/Pro + 중복 그래프 + 스크린샷 OCR 보강 · 기록 다중 선택/일괄 삭제, 구매 태그, 당첨 성과 차트, 원본 사진 포함 완전 백업/복원을 지원합니다. OCR 언어/엔진 데이터는 최초 사용 시 인터넷 연결이 필요할 수 있습니다.</p>
+  <p class="footer">v0.10.5 · Simple/Pro + 중복 그래프 + 스크린샷 OCR 보강 · 기록 다중 선택/일괄 삭제, 구매 태그, 당첨 성과 차트, 원본 사진 포함 완전 백업/복원을 지원합니다. OCR 언어/엔진 데이터는 최초 사용 시 인터넷 연결이 필요할 수 있습니다.</p>
 </div>
 
 <dialog id="cameraDialog">
@@ -399,7 +399,7 @@
 (() => {
   'use strict';
 
-  const VERSION='0.10.4';
+  const VERSION='0.10.5';
   const STORAGE_KEY='lotto-number-lab-v0100';
   const LEGACY_KEYS=['lotto-number-lab-v090','lotto-number-lab-v080','lotto-number-lab-v070','lotto-number-lab-v060','lotto-number-lab-v050','lotto-number-lab-v040','lotto-number-lab-v030','lotto-number-lab-v020','lotto-number-lab-v010'];
   const state={
@@ -1117,7 +1117,7 @@
   async function registerServiceWorker(){if(!('serviceWorker' in navigator)||location.protocol==='file:')return;try{const reg=await navigator.serviceWorker.register('./sw.js');state.swRegistration=reg;if(reg.waiting)showUpdate(reg.waiting);reg.addEventListener('updatefound',()=>{const w=reg.installing;if(!w)return;w.addEventListener('statechange',()=>{if(w.state==='installed'&&navigator.serviceWorker.controller)showUpdate(w)})});navigator.serviceWorker.addEventListener('controllerchange',()=>location.reload())}catch(e){console.warn('service worker',e)}}
   if(els.checkUpdateBtn)els.checkUpdateBtn.onclick=async()=>{if(!state.swRegistration)return toast('서비스 워커를 아직 사용할 수 없습니다.');toast('업데이트를 확인합니다.');try{await state.swRegistration.update();if(!state.swRegistration.waiting)setTimeout(()=>toast('현재 최신 버전입니다.'),500)}catch{toast('업데이트 확인에 실패했습니다.')}};if(els.applyUpdateBtn)els.applyUpdateBtn.onclick=()=>{const w=state.waitingWorker||state.swRegistration?.waiting;if(w)w.postMessage({type:'SKIP_WAITING'})};registerServiceWorker();
   window.addEventListener('beforeunload',()=>{state.ocrWorker?.terminate?.();state.scanQueue.forEach(q=>URL.revokeObjectURL(q.previewUrl))});
-  load();renderCandidates();renderScanQueue();renderAll();renderSimpleResults();showModeGate();refreshImageStorage();
+  load();renderCandidates();renderScanQueue();renderAll();renderSimpleResults();setAppMode('simple');refreshImageStorage();
 })();
 
 </script>
